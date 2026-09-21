@@ -7,6 +7,8 @@ import { DatabaseService } from './common/database.service';
 import { HealthController } from './common/health.controller';
 import { RecordsController } from './records/records.controller';
 import { RecordsService } from './records/records.service';
+import { SharingController } from './sharing/sharing.controller';
+import { SharingService } from './sharing/sharing.service';
 
 @Module({
   imports: [
@@ -15,7 +17,7 @@ import { RecordsService } from './records/records.service';
       signOptions: { expiresIn: '8h' },
     }),
   ],
-  controllers: [HealthController, AuthController, RecordsController],
-  providers: [AuthService, DatabaseService, AuditService, RecordsService],
+  controllers: [HealthController, AuthController, RecordsController, SharingController],
+  providers: [AuthService, DatabaseService, AuditService, RecordsService, SharingService],
 })
 export class AppModule {}

@@ -35,3 +35,7 @@ body {
 .w-e-text-container {
   min-height: 220px;
 }
+
+.patient-row-active > td {
+  background: #e6f4ff !important;
+}

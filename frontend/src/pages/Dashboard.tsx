@@ -6,6 +6,7 @@ import '@wangeditor/editor/dist/css/style.css';
 import { fetchSummary, fetchTimeline, searchPatients } from '../api/emr';
 import { APP_NAME, PRESCRIPTION_STATUS, ROLE_OPTIONS } from '../constants/app';
 import { MetricCard } from '../components/MetricCard';
+import { SharingPanel } from '../components/SharingPanel';
 import type { MedicalRecord, Patient, Summary } from '../types/emr';
 
 const { Header, Content } = Layout;
@@ -14,14 +15,20 @@ export function Dashboard() {
   const [summary, setSummary] = useState<Summary>({ patientCount: 0, recordCount: 0, prescriptionCount: 0, workload: [] });
   const [patients, setPatients] = useState<Patient[]>([]);
   const [timeline, setTimeline] = useState<MedicalRecord[]>([]);
+  const [selectedPatient, setSelectedPatient] = useState<Patient | null>(null);
   const [editorHtml, setEditorHtml] = useState('<p>主诉：发热伴咳嗽。诊疗计划：完善血常规检查。</p>');
+
+  const selectPatient = async (patient: Patient) => {
+    setSelectedPatient(patient);
+    setTimeline(await fetchTimeline(patient.id));
+  };
 
   const load = async () => {
     const [summaryData, patientData] = await Promise.all([fetchSummary(), searchPatients('')]);
     setSummary(summaryData);
     setPatients(patientData);
     if (patientData[0]) {
-      setTimeline(await fetchTimeline(patientData[0].id));
+      await selectPatient(patientData[0]);
     }
   };
 
@@ -60,7 +67,8 @@ export function Dashboard() {
                 rowKey="id"
                 dataSource={patients}
                 pagination={false}
-                onRow={(record) => ({ onClick: () => fetchTimeline(record.id).then(setTimeline) })}
+                rowClassName={(record) => (record.id === selectedPatient?.id ? 'patient-row-active' : '')}
+                onRow={(record) => ({ onClick: () => void selectPatient(record) })}
                 columns={[
                   { title: '档案编号', dataIndex: 'recordNo' },
                   { title: '姓名', dataIndex: 'name' },
@@ -86,6 +94,12 @@ export function Dashboard() {
                 }))}
               />
             </Card>
+          </Col>
+        </Row>
+
+        <Row gutter={[16, 16]}>
+          <Col xs={24}>
+            {selectedPatient && <SharingPanel patient={selectedPatient} />}
           </Col>
         </Row>
 

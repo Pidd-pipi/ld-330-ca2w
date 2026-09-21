@@ -28,3 +28,51 @@ export interface Summary {
   prescriptionCount: number;
   workload: Array<{ department: string; count: number }>;
 }
+
+export interface Institution {
+  id: number;
+  code: string;
+  name: string;
+}
+
+export type AuthorizationStatus = 'active' | 'revoked' | 'expired';
+
+export interface ShareAuthorization {
+  id: number;
+  patientId: number;
+  institutionId: number;
+  institutionName: string;
+  purpose: string;
+  durationHours: number;
+  status: AuthorizationStatus;
+  version: number;
+  expiresAt: string;
+  revokedAt: string | null;
+  createdAt: string;
+}
+
+export interface AccessAudit {
+  id: number;
+  institutionName: string;
+  doctor: string;
+  purpose: string;
+  result: 'allowed' | 'denied';
+  denyReason: string | null;
+  accessedAt: string;
+}
+
+export interface SharingOverview {
+  authorizations: ShareAuthorization[];
+  audits: AccessAudit[];
+}
+
+export interface GrantResult {
+  authorization: ShareAuthorization;
+  duplicated: boolean;
+}
+
+export interface AccessResult {
+  allowed: boolean;
+  authorization: ShareAuthorization;
+  records: MedicalRecord[];
+}
