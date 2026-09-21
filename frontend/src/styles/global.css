@@ -1,0 +1,37 @@
+body {
+  margin: 0;
+  background: #eef3f8;
+}
+
+.app-shell {
+  min-height: 100vh;
+}
+
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #ffffff;
+  border-bottom: 1px solid #dce3ec;
+  padding: 0 24px;
+}
+
+.topbar h3 {
+  margin: 0;
+  color: #17324d;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 24px;
+}
+
+.metric-card {
+  border-radius: 8px;
+}
+
+.w-e-text-container {
+  min-height: 220px;
+}
